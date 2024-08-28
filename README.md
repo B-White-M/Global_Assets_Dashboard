@@ -9,6 +9,13 @@ In response to the need to identify and mitigate potential legal and financial i
 
 The globally published dashboard has become a key tool for preventing adverse financial impacts on the company, allowing executives and stakeholders to make decisions based on up-to-date and accurate data.
 
+# Technologies Used: 
+
+### - Power BI
+### - Real-Time Data Integration
+### - DAX for Data Transformation
+### - SQL for Data Collection and Connection 
+
 # Key Features
 
 ### Real-Time Visualization: 
@@ -19,13 +26,6 @@ Break down impacts by geographic location, making it easier to identify localize
 Identify potential legal impacts, giving teams the ability to take preventative action.
 ### Global Publishing: 
 The dashboard is globally accessible by different stakeholders within the organization for constant monitoring.
-
-# Technologies Used: 
-
-#### - Power BI
-#### - Real-Time Data Integration
-#### - DAX for Data Transformation
-#### - SQL for Data Collection and Connection 
 
 # Results:
 
