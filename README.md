@@ -1,7 +1,11 @@
+### [Back to Main-Projects tab](https://github.com/B-White-M/Projects/blob/8607106993c92fbc311fdcfcad864c89a5b70c85/README.md)
+
+
 # Global_Assets_Dashboard:
 
 Power BI project that analyzes and visualizes asset management data, identifies recurring errors and potential financial risks, and includes a real-time location visualization map connected to an SQL environment to support decision-making.
 -This Dashbard saved >1250 hours annually and represents a saving of >$850K USD.
+
 
 # Brief explanation of the logic used:
 
@@ -9,12 +13,14 @@ In response to the need to identify and mitigate potential legal and financial i
 
 The globally published dashboard has become a key tool for preventing adverse financial impacts on the company, allowing executives and stakeholders to make decisions based on up-to-date and accurate data.
 
+
 ## Technologies Used: 
 
 ### - Power BI
 ### - Real-Time Data Integration
 ### - DAX for Data Transformation
 ### - SQL for Data Collection and Connection 
+
 
 ## Key Features
 
@@ -27,11 +33,13 @@ Identify potential legal impacts, giving teams the ability to take preventative 
 ### Global Publishing: 
 The dashboard is globally accessible by different stakeholders within the organization for constant monitoring.
 
+
 ## Results:
 
 - Reduction of potential financial impacts due to proactive problem detection.
 - Global implementation of the visualization system, currently used by different levels of the organization.
 - This Dashbard saved >1250 hours annually and represents a saving of >$850K USD.
+
 
 # DAX Code used:
 Here is an example of the DAX code used in the project
