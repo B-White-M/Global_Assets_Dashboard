@@ -46,7 +46,7 @@ The dashboard is globally accessible by different stakeholders within the organi
 Here is an example of the Code M (Power Query) code used in the project
 
 ```m
-Data Source details:
+## Data Source details:
 
 // Establish connection to the SAP HANA database (example data)
 Source = SapHana.Database("EXAMPLE", [EXAMPLE2="2.0"]),
