@@ -46,7 +46,7 @@ The dashboard is globally accessible by different stakeholders within the organi
 Here is an example of the Code M (Power Query) code used in the project
 
 ```m
-## Data Source details:
+Data Source details:
 
 // Establish connection to the SAP HANA database (example data)
 Source = SapHana.Database("EXAMPLE", [EXAMPLE2="2.0"]),
@@ -71,6 +71,10 @@ Contents = Source{...}[...],
         {Cube.AddMeasureColumn, "Net Book Value", "[Measures].[NetBookVal]"},     // Net book value
         {Cube.AddMeasureColumn, "APC Amount", "[Measures].[APCAmount]"}           // Asset Purchase Cost (APC) amount
     }),
+
+
+
+Data Clean-up:
 
     // Change data types of selected columns for further processing
     #"Changed Type" = Table.TransformColumnTypes(#"Added Parameters", {...}),
@@ -114,6 +118,10 @@ Contents = Source{...}[...],
 
     // Expand the merged table to expose the relevant columns
     #"Expanded CONCATENATE Aged (Table)" = Table.ExpandTableColumn(#"Merged Queries", "CONCATENATE Aged (Table)", {"Asset Number"}, {"CONCATENATE Aged (Table).Asset Number"}),
+
+
+
+Data integration for Primary Key generation:
 
     // Filter out rows where there is a match in the CONCATENATE Aged table
     #"Filtered Data" = Table.SelectRows(#"Expanded CONCATENATE Aged (Table)", each [#"CONCATENATE Aged (Table).Asset Number"] = null),
