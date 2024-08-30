@@ -135,14 +135,87 @@ Data integration for Primary Key generation:
     // Create a final unique identifier by combining company code and division
     #"UID creation" = Table.AddColumn(#"Remove nulls", "UID", each Text.Combine({Text.From([Company Code], "en-US"), [Division]}, "_"), type text)
 
-in
-    #"UID creation"
+
+Primary Key integration across multiple repositories (Power BI report server):
+
+// Combining multiple tables into a single table for further processing
+    Source = Table.Combine({#"CONCATENATE Aged", #"CONCATENATE Misaligned CC",  #"CONCATENATE Missing Main", #"CONCATENATE Missing UAI"}),
+
+    // Selecting only the relevant columns from the combined table
+    #"Removed Other Columns" = Table.SelectColumns(Source,{"Super Group", "Division", "Company Code", "Group"}),
+
+    // Changing the data type of certain columns to ensure consistency
+    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"Division", type text}, {"Company Code", type text}}),
+
+    // Creating a new column called "UID" by merging the "Company Code" and "Division" columns with an underscore separator
+    #"Inserted Merged Column" = Table.AddColumn(#"Changed Type", "UID", each Text.Combine({[Company Code], [Division]}, "_"), type text),
+
+    // Filtering rows to remove any records where "Division" or "Company Code" are null or empty
+    #"Filtered Rows" = Table.SelectRows(#"Inserted Merged Column", each [#"Division"] <> null and [#"Division"] <> "" and [#"Company Code"] <> null and [#"Company Code"] <> ""),
+
+    // Removing duplicate rows based on the unique "UID" column to maintain uniqueness
+    #"Removed Duplicates" = Table.Distinct(#"Filtered Rows", {"UID"})
+
+
+
+Query that extracts data from an Excel, processes location-related data (using web-scrapping data), and prepares it for mapping by sorting and filtering important columns.
+
+// Extracting the "Locations_Table" from an Excel workbook
+    Source = Excel.Workbook(File.Contents("Path/To/Location.xlsx"), null, true),
+    Locations_Table = Source{[Item="Locations_Table",Kind="Table"]}[Data],
+
+    // Changing the data types of columns to their correct formats (text, number, etc.)
+    #"Changed Type" = Table.TransformColumnTypes(Locations_Table,{{"Company", type text}, {"Plant", type text}, {"Location", type text}, {"Latitude", type number}, {"Longitude", type number}, {"Location Status", type text}}),
+
+    // Filtering out rows where "Location" or "Plant" data is missing
+    #"Remove Nulls" = Table.SelectRows(#"Changed Type", each [#"Location"] <> null and [#"Location"] <> "" and [#"Plant"] <> null and [#"Plant"] <> ""),
+
+    // Selecting relevant columns for mapping and analysis
+    #"Map Lat&Long" = Table.SelectColumns(#"Remove Nulls",{"Plant", "Location", "Latitude", "Longitude", "Location Status"}),
+
+    // Creating a new column "Plant_UID" by merging "Plant" and "Location" with an underscore separator for unique identification
+    #"Inserted Merged Column Location" = Table.AddColumn(#"Map Lat&Long", "Plant_UID", each Text.Combine({Text.From([Plant], "en-US"), [Location]}, "_"), type text),
+
+    // Sorting the data by the "Plant" column for better readability and analysis
+    #"Sorted Rows" = Table.Sort(#"Inserted Merged Column Location",{{"Plant", Order.Ascending}})
+
 ```
 
 ### DAX Code used:
 Here is an example of the DAX Code code used in the project
 
 ```DAX
-Data Source details:
+// Measure #1:
+// If  the count of 'Asset_Number' entries from the 'Aged SAMPLE' table = 0, it returns 0; otherwise, it returns the total count.
+Aged Full Number =
+IF (
+    COUNT ( 'Aged SAMPLE'[Asset_Number] ) = 0,
+    0,
+    COUNT ( 'Aged SAMPLE'[Asset_Number] )
+)
 
+// Measure #2:
+// This measure calculates the difference between the total number of assets and the number of assets with input owners in the 'SAMPLE' table.
+// If all assets have input owners, it returns 0; otherwise, it returns the difference.
+Aged No Input =
+IF (
+    COUNT ( 'Aged SAMPLE'[Asset_Number] )
+        - COUNT ( 'Aged SAMPLE'[Input Group Owner] ) = 0,
+    0,
+    COUNT ( 'Aged SAMPLE'[Asset_Number] )
+        - COUNT ( 'Aged SAMPLE'[Input Group Owner] )
+)
+
+// Measure #3:
+// This measure sums the '$_Price' for all assets in the 'Aged SAMPLE' table where the 'Input Group Owner' is not blank and the asset is classified as "Taxable Asset".
+TaxableResponses = 
+SUMX(
+    FILTER(
+        'Aged Assets Knime',
+        'Aged Assets Knime'[Input Group Owner] <> "" &&
+        'Aged Assets Knime'[Taxable Asset] = "Taxable Asset"
+    ),
+    'Aged Assets Knime'[$_Price]
+)
+```
 
