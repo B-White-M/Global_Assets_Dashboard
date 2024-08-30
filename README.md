@@ -45,8 +45,9 @@ The dashboard is globally accessible by different stakeholders within the organi
 # M (query) Code used:
 Here is an example of the Code M (Power Query) code used in the project
 
+## Data Source details:
+
 ```m
-Data Source details:
 
 // Establish connection to the SAP HANA database (example data)
 Source = SapHana.Database("EXAMPLE", [EXAMPLE2="2.0"]),
@@ -72,10 +73,11 @@ Contents = Source{...}[...],
         {Cube.AddMeasureColumn, "APC Amount", "[Measures].[APCAmount]"}           // Asset Purchase Cost (APC) amount
     }),
 
+```
 
+## Data Clean-up:
 
-Data Clean-up:
-
+```
     // Change data types of selected columns for further processing
     #"Changed Type" = Table.TransformColumnTypes(#"Added Parameters", {...}),
 
@@ -119,9 +121,10 @@ Data Clean-up:
     // Expand the merged table to expose the relevant columns
     #"Expanded CONCATENATE Aged (Table)" = Table.ExpandTableColumn(#"Merged Queries", "CONCATENATE Aged (Table)", {"Asset Number"}, {"CONCATENATE Aged (Table).Asset Number"}),
 
+```
+## Data integration for Primary Key generation:
 
-
-Data integration for Primary Key generation:
+```
 
     // Filter out rows where there is a match in the CONCATENATE Aged table
     #"Filtered Data" = Table.SelectRows(#"Expanded CONCATENATE Aged (Table)", each [#"CONCATENATE Aged (Table).Asset Number"] = null),
@@ -135,9 +138,11 @@ Data integration for Primary Key generation:
     // Create a final unique identifier by combining company code and division
     #"UID creation" = Table.AddColumn(#"Remove nulls", "UID", each Text.Combine({Text.From([Company Code], "en-US"), [Division]}, "_"), type text)
 
+```
 
-Primary Key integration across multiple repositories (Power BI report server):
+## Primary Key integration across multiple repositories (Power BI report server):
 
+```
 // Combining multiple tables into a single table for further processing
     Source = Table.Combine({#"CONCATENATE Aged", #"CONCATENATE Misaligned CC",  #"CONCATENATE Missing Main", #"CONCATENATE Missing UAI"}),
 
@@ -157,17 +162,18 @@ Primary Key integration across multiple repositories (Power BI report server):
     #"Removed Duplicates" = Table.Distinct(#"Filtered Rows", {"UID"})
 
 ```
-Primary Key integration across multiple repositories
+## Primary Key integration across multiple repositories
 
 ![Intvw 1](https://github.com/user-attachments/assets/af1c91a4-71e4-4093-a7e0-a5ee2055fca2)
 
-Table of inputs provided generated, based on the Primary Key.
+## Table of inputs provided generated, based on the Primary Key.
 
 ![Intvw 4](https://github.com/user-attachments/assets/cd0a322a-26a4-4b56-b90e-8960b7a009d9)
 
-```
-Query that extracts data from an Excel, processes location-related data (using web-scrapping data), and prepares it for mapping by sorting and filtering important columns.
 
+## Query that extracts data from an Excel, processes location-related data (using web-scrapping data), and prepares it for mapping by sorting and filtering important columns.
+
+```
 // Extracting the "Locations_Table" from an Excel workbook
     Source = Excel.Workbook(File.Contents("Path/To/Location.xlsx"), null, true),
     Locations_Table = Source{[Item="Locations_Table",Kind="Table"]}[Data],
@@ -188,21 +194,21 @@ Query that extracts data from an Excel, processes location-related data (using w
     #"Sorted Rows" = Table.Sort(#"Inserted Merged Column Location",{{"Plant", Order.Ascending}})
 
 ```
-Visualization that extracts data from an Excel, processes location-related data 
+## Visualization that extracts data from an Excel, processes location-related data 
 
 ![Intvw 2](https://github.com/user-attachments/assets/e9ac9b17-af6f-4fb3-8d92-af8c33fb1177)
 
-Visualization (with filter applied) that extracts data from an Excel, processes location-related data 
+## Visualization (with filter applied) that extracts data from an Excel, processes location-related data 
 
 ![Intvw 3](https://github.com/user-attachments/assets/4ebbad69-dc33-44be-919a-f4b224f3f6ad)
 
-```
 
-### DAX Code used:
+## DAX Code used:
 Here is an example of the DAX Code code used in the project
 
-```DAX
-// Measure #1:
+### Measure #1:
+
+``` DAX
 // If  the count of 'Asset_Number' entries from the 'Aged SAMPLE' table = 0, it returns 0; otherwise, it returns the total count.
 Aged Full Number =
 IF (
@@ -211,7 +217,11 @@ IF (
     COUNT ( 'Aged SAMPLE'[Asset_Number] )
 )
 
-// Measure #2:
+```
+
+### Measure #2:
+
+```
 // This measure calculates the difference between the total number of assets and the number of assets with input owners in the 'SAMPLE' table.
 // If all assets have input owners, it returns 0; otherwise, it returns the difference.
 Aged No Input =
@@ -223,7 +233,11 @@ IF (
         - COUNT ( 'Aged SAMPLE'[Input Group Owner] )
 )
 
-// Measure #3:
+```
+
+### Measure #3:
+
+```
 // This measure sums the '$_Price' for all assets in the 'Aged SAMPLE' table where the 'Input Group Owner' is not blank and the asset is classified as "Taxable Asset".
 TaxableResponses = 
 SUMX(
