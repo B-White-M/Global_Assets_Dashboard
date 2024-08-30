@@ -47,10 +47,11 @@ Here is an example of the Code M (Power Query) code used in the project
 
 ## Data Source details:
 
-``` m code
+```m
 
 // Establish connection to the SAP HANA database (example data)
-Source = SapHana.Database("EXAMPLE", [EXAMPLE2="2.0"]),
+let
+    Source = SapHana.Database("EXAMPLE", [EXAMPLE2="2.0"]),
 
 // Extract content from the specified source
 Contents = Source{...}[...],
@@ -73,6 +74,8 @@ Contents = Source{...}[...],
         {Cube.AddMeasureColumn, "APC Amount", "[Measures].[APCAmount]"}           // Asset Purchase Cost (APC) amount
     }),
 
+in
+    #"Changed Type"
 ```
 
 ## Data Clean-up:
