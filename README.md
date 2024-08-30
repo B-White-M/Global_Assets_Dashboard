@@ -47,7 +47,7 @@ Here is an example of the Code M (Power Query) code used in the project
 
 ## Data Source details:
 
-```m
+``` m code
 
 // Establish connection to the SAP HANA database (example data)
 Source = SapHana.Database("EXAMPLE", [EXAMPLE2="2.0"]),
@@ -77,7 +77,8 @@ Contents = Source{...}[...],
 
 ## Data Clean-up:
 
-```
+```m code
+
     // Change data types of selected columns for further processing
     #"Changed Type" = Table.TransformColumnTypes(#"Added Parameters", {...}),
 
@@ -124,7 +125,7 @@ Contents = Source{...}[...],
 ```
 ## Data integration for Primary Key generation:
 
-```
+```m
 
     // Filter out rows where there is a match in the CONCATENATE Aged table
     #"Filtered Data" = Table.SelectRows(#"Expanded CONCATENATE Aged (Table)", each [#"CONCATENATE Aged (Table).Asset Number"] = null),
@@ -208,7 +209,7 @@ Here is an example of the DAX Code code used in the project
 
 ### Measure #1:
 
-``` DAX
+```dax
 // If  the count of 'Asset_Number' entries from the 'Aged SAMPLE' table = 0, it returns 0; otherwise, it returns the total count.
 Aged Full Number =
 IF (
@@ -221,7 +222,7 @@ IF (
 
 ### Measure #2:
 
-```
+``` dax
 // This measure calculates the difference between the total number of assets and the number of assets with input owners in the 'SAMPLE' table.
 // If all assets have input owners, it returns 0; otherwise, it returns the difference.
 Aged No Input =
@@ -237,7 +238,7 @@ IF (
 
 ### Measure #3:
 
-```
+``` dax code
 // This measure sums the '$_Price' for all assets in the 'Aged SAMPLE' table where the 'Input Group Owner' is not blank and the asset is classified as "Taxable Asset".
 TaxableResponses = 
 SUMX(
