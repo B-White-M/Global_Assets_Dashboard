@@ -156,13 +156,17 @@ Primary Key integration across multiple repositories (Power BI report server):
     // Removing duplicate rows based on the unique "UID" column to maintain uniqueness
     #"Removed Duplicates" = Table.Distinct(#"Filtered Rows", {"UID"})
 
+```
+Primary Key integration across multiple repositories
+
 ![Intvw 1](https://github.com/user-attachments/assets/a61d1f72-2bec-4444-8e1b-12e4e8c7fc97)
 
-    // Table of inputs provided generated, based on the Primary Key.
+Table of inputs provided generated, based on the Primary Key.
 
 ![Intvw 4](https://github.com/user-attachments/assets/153cd349-1803-4f72-b266-6c94eeceab5c)
 
 
+```
 Query that extracts data from an Excel, processes location-related data (using web-scrapping data), and prepares it for mapping by sorting and filtering important columns.
 
 // Extracting the "Locations_Table" from an Excel workbook
