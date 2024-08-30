@@ -159,12 +159,11 @@ Primary Key integration across multiple repositories (Power BI report server):
 ```
 Primary Key integration across multiple repositories
 
-![Intvw 1](https://github.com/user-attachments/assets/a61d1f72-2bec-4444-8e1b-12e4e8c7fc97)
+![Intvw 1](https://github.com/user-attachments/assets/af1c91a4-71e4-4093-a7e0-a5ee2055fca2)
 
 Table of inputs provided generated, based on the Primary Key.
 
-![Intvw 4](https://github.com/user-attachments/assets/153cd349-1803-4f72-b266-6c94eeceab5c)
-
+![Intvw 4](https://github.com/user-attachments/assets/cd0a322a-26a4-4b56-b90e-8960b7a009d9)
 
 ```
 Query that extracts data from an Excel, processes location-related data (using web-scrapping data), and prepares it for mapping by sorting and filtering important columns.
@@ -188,8 +187,14 @@ Query that extracts data from an Excel, processes location-related data (using w
     // Sorting the data by the "Plant" column for better readability and analysis
     #"Sorted Rows" = Table.Sort(#"Inserted Merged Column Location",{{"Plant", Order.Ascending}})
 
-![Intvw 2](https://github.com/user-attachments/assets/944114c0-b440-4f9f-894b-d89cab794126)
-![Intvw 3](https://github.com/user-attachments/assets/e88494a4-422b-49be-8afb-d97fcdffc6c6)
+```
+Visualization that extracts data from an Excel, processes location-related data 
+
+![Intvw 2](https://github.com/user-attachments/assets/e9ac9b17-af6f-4fb3-8d92-af8c33fb1177)
+
+Visualization (with filter applied) that extracts data from an Excel, processes location-related data 
+
+![Intvw 3](https://github.com/user-attachments/assets/4ebbad69-dc33-44be-919a-f4b224f3f6ad)
 
 ```
 
