@@ -48,8 +48,6 @@ Here is an example of the Code M (Power Query) code used in the project
 ## Data Source details:
 
 ```m
-
-// Establish connection to the SAP HANA database (example data)
 let
     Source = SapHana.Database("EXAMPLE", [EXAMPLE2="2.0"]),
 
@@ -75,7 +73,7 @@ Contents = Source{...}[...],
     }),
 
 in
-    #"Changed Type"
+    #"Added Parameters"
 ```
 
 ## Data Clean-up:
