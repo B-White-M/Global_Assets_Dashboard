@@ -212,6 +212,7 @@ Here is an example of the DAX Code code used in the project
 
 ```dax
 // If  the count of 'Asset_Number' entries from the 'Aged SAMPLE' table = 0, it returns 0; otherwise, it returns the total count.
+
 Aged Full Number =
 IF (
     COUNT ( 'Aged SAMPLE'[Asset_Number] ) = 0,
@@ -226,6 +227,7 @@ IF (
 ``` dax
 // This measure calculates the difference between the total number of assets and the number of assets with input owners in the 'SAMPLE' table.
 // If all assets have input owners, it returns 0; otherwise, it returns the difference.
+
 CONCAT SAMPLE Total = 
 VAR CurrentYear = YEAR(TODAY())
 VAR CurrentQuarter = QUARTER(TODAY())
@@ -248,6 +250,7 @@ IF(
 
 ``` dax code
 // This measure sums the '$_Price' for all assets in the 'Aged SAMPLE' table where the 'Input Group Owner' is not blank and the asset is classified as "Taxable Asset".
+
 TaxableResponses = 
 SUMX(
     FILTER(
