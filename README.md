@@ -211,15 +211,25 @@ Here is an example of the DAX Code code used in the project
 ### Measure #1:
 
 ```dax
-// If  the count of 'Asset_Number' entries from the 'Aged SAMPLE' table = 0, it returns 0; otherwise, it returns the total count.
+// If asset counts <> 0, then "measure" counts and compares them against a 20% threshold. Returns a warning if the threshold is not met, or an empty string if no filters are applied.
 
-Aged Full Number =
-IF (
-    COUNT ( 'Aged SAMPLE'[Asset_Number] ) = 0,
-    0,
-    COUNT ( 'Aged SAMPLE'[Asset_Number] )
+Aged Status = 
+VAR AgedAssetsCount = COUNT('Aged SAMPLE'[Asset XXXX Number])
+VAR ConcatenatedAgedCount = COUNT('CONCATENATE SAMPLE'[Asset XXXX])
+VAR Threshold = AgedAssetsCount * 0.2
+
+VAR NoFiltersApplied = 
+    NOT ISFILTERED('SAMPLE XXXX Table'[Super Group]) &&
+    NOT ISFILTERED('SAMPLE XXXX Table'[Division]) &&
+    NOT ISFILTERED('SAMPLE XXXX Table'[Group]) &&
+    NOT ISFILTERED('SAMPLE XXXX Table'[XXXX Code])
+
+RETURN
+IF(NoFiltersApplied, "", 
+   IF(AgedAssetsCount = 0, "",
+      IF(Threshold > ConcatenatedAgedCount, "Q' Inputs < 20%", "")
+   )
 )
-
 ```
 
 ### Measure #2:
