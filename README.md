@@ -226,14 +226,21 @@ IF (
 ``` dax
 // This measure calculates the difference between the total number of assets and the number of assets with input owners in the 'SAMPLE' table.
 // If all assets have input owners, it returns 0; otherwise, it returns the difference.
-Aged No Input =
-IF (
-    COUNT ( 'Aged SAMPLE'[Asset_Number] )
-        - COUNT ( 'Aged SAMPLE'[Input Group Owner] ) = 0,
-    0,
-    COUNT ( 'Aged SAMPLE'[Asset_Number] )
-        - COUNT ( 'Aged SAMPLE'[Input Group Owner] )
+CONCAT SAMPLE Total = 
+VAR CurrentYear = YEAR(TODAY())
+VAR CurrentQuarter = QUARTER(TODAY())
+VAR AssetCount = 
+
+CALCULATE(
+    COUNT('CONCATENATE  SAMPLE'[Asset Number]),
+    YEAR('CONCATENATE  SAMPLE'[Quarter]) = CurrentYear,
+    QUARTER('CONCATENATE  SAMPLE'[Quarter]) = CurrentQuarter
 )
+RETURN
+IF(
+    (AssetCount)=0,
+    0,
+    AssetCount)
 
 ```
 
